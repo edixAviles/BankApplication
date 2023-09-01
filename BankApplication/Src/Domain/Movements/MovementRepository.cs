@@ -6,9 +6,9 @@ namespace BankApplication.Src.Domain.Movements
 {
     public class MovementRepository : IMovementRepository
     {
-        private readonly BaseContext _context;
+        private readonly BankApplicationDbContext _context;
 
-        public MovementRepository(BaseContext context)
+        public MovementRepository(BankApplicationDbContext context)
         {
             _context = context;
         }

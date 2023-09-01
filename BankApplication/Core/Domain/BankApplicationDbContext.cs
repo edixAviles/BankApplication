@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BankApplication.Core.Domain
 {
-    public class BaseContext : DbContext
+    public class BankApplicationDbContext : DbContext
     {
-        public BaseContext(DbContextOptions<BaseContext> options) : base(options)
+        public BankApplicationDbContext(DbContextOptions<BankApplicationDbContext> options) : base(options)
         {
         }
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<BaseContext>(opt =>
+builder.Services.AddDbContext<BankApplicationDbContext>(opt =>
 {
     opt.UseSqlServer(
         builder.Configuration.GetConnectionString("BankApplicationDb"),

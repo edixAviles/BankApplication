@@ -6,9 +6,9 @@ namespace BankApplication.Src.Domain.Customers
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private readonly BaseContext _context;
+        private readonly BankApplicationDbContext _context;
 
-        public CustomerRepository(BaseContext context)
+        public CustomerRepository(BankApplicationDbContext context)
         {
             _context = context;
         }

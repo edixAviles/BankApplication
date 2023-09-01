@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BankApplication.Migrations
 {
-    [DbContext(typeof(BaseContext))]
+    [DbContext(typeof(BankApplicationDbContext))]
     [Migration("20230828184408_init")]
     partial class init
     {

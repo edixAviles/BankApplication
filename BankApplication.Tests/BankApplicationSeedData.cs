@@ -7,12 +7,12 @@ namespace BankApplication.Tests
 {
     public class BankApplicationSeedData
     {
-        public BaseContext Context { get; set; }
+        public BankApplicationDbContext Context { get; set; }
 
         public BankApplicationSeedData()
         {
-            var options = new DbContextOptionsBuilder<BaseContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-            Context = new BaseContext(options);
+            var options = new DbContextOptionsBuilder<BankApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+            Context = new BankApplicationDbContext(options);
 
             if (!Context.Customers.Any())
             {
