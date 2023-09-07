@@ -35,6 +35,7 @@ namespace BankApplication.Core.Domain
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
