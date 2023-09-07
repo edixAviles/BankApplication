@@ -6,6 +6,6 @@ namespace BankApplication.Src.Contracts.Movements
     {
         Task<Response<MovementDto>> GetMovement(Guid id);
         Task<Response<MovementDto>> InsertMovement(InsertMovementDto movementData);
-        Task<Response<List<MovementsReportDto>>> GetMovementsByCustomerAndDate(Guid customerId, DateTime startDate, DateTime endDate);
+        Task<Response<IEnumerable<MovementsReportDto>>> GetMovementsByCustomerAndDate(Guid customerId, DateTime startDate, DateTime endDate);
     }
 }

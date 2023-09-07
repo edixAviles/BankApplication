@@ -13,13 +13,13 @@ namespace BankApplication.Src.Domain.Accounts
             _accountRepository = accountRepository;
         }
 
-        public async Task<Account> Get(Guid id)
+        public async Task<Account> GetAsync(Guid id)
         {
-            var entity = await FoundEntity(id);
+            var entity = await FoundEntityAsync(id);
             return entity;
         }
 
-        public async Task<Account> Insert(InsertAccountDto accountInsert)
+        public async Task<Account> InsertAsync(InsertAccountDto accountInsert)
         {
             var account = new Account
             {
@@ -31,41 +31,41 @@ namespace BankApplication.Src.Domain.Accounts
                 CustomerId = accountInsert.CustomerId
             };
 
-            var entity = await _accountRepository.Insert(account);
+            var entity = await _accountRepository.InsertAsync(account);
             return entity;
         }
 
-        public async Task<Account> Update(UpdateAccountDto accountUpdate)
+        public async Task<Account> UpdateAsync(UpdateAccountDto accountUpdate)
         {
-            var entity = await FoundEntity(accountUpdate.Id);
+            var entity = await FoundEntityAsync(accountUpdate.Id);
             entity.Number = accountUpdate.Number;
             entity.Type = accountUpdate.Type;
             entity.InitialBalance = accountUpdate.InitialBalance;
             entity.State = accountUpdate.State;
             entity.CustomerId = accountUpdate.CustomerId;
 
-            var entityUpdated = await _accountRepository.Update(entity);
+            var entityUpdated = _accountRepository.Update(entity);
             return entityUpdated;
         }
 
-        public async Task<Account> UpateInitialBalance(Guid id, double balance)
+        public async Task<Account> UpateInitialBalanceAsync(Guid id, double balance)
         {
-            var entity = await FoundEntity(id);
+            var entity = await FoundEntityAsync(id);
             entity.InitialBalance = balance;
 
-            var entityUpdated = await _accountRepository.Update(entity);
+            var entityUpdated = _accountRepository.Update(entity);
             return entityUpdated;
         }
 
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            _ = await FoundEntity(id);
-            await _accountRepository.Delete(id);
+            _ = await FoundEntityAsync(id);
+            _accountRepository.Delete(id);
         }
 
-        private async Task<Account> FoundEntity(Guid id)
+        private async Task<Account> FoundEntityAsync(Guid id)
         {
-            var entity = await _accountRepository.Get(id);
+            var entity = await _accountRepository.GetAsync(id);
             return entity ?? throw new ServiceException(AccountConsts.ErrorAccountNotExists);
         }
     }

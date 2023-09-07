@@ -4,9 +4,9 @@ namespace BankApplication.Src.Contracts.Customers
 {
     public interface ICustomerManager
     {
-        Task<Customer> Get(Guid id);
-        Task<Customer> Insert(InsertCustomerDto accountInsert);
-        Task<Customer> Update(UpdateCustomerDto accountUpdate);
-        Task Delete(Guid id);
+        Task<Customer> GetAsync(Guid id);
+        Task<Customer> InsertAsync(InsertCustomerDto accountInsert);
+        Task<Customer> UpdateAsync(UpdateCustomerDto accountUpdate);
+        Task DeleteAsync(Guid id);
     }
 }

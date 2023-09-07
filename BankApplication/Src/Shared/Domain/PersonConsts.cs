@@ -5,7 +5,7 @@ namespace BankApplication.Src.Shared.Domain
 {
     public class PersonConsts
     {
-        public static readonly IList<string> Genders = new ReadOnlyCollection<string>(new[]
+        public static readonly IEnumerable<string> Genders = new ReadOnlyCollection<string>(new[]
         {
             "MASCULINO", "FEMENINO"
         });

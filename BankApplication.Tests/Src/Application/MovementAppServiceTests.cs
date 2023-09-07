@@ -1,7 +1,10 @@
-﻿using BankApplication.Src.Application.Movements;
+﻿using BankApplication.Core.Domain;
+using BankApplication.Src.Application.Movements;
 using BankApplication.Src.Contracts.Movements;
 using BankApplication.Src.Domain.Accounts;
 using BankApplication.Src.Domain.Movements;
+using BankApplication.Src.EFCore.Accounts;
+using BankApplication.Src.EFCore.Movements;
 using BankApplication.Src.Shared.Domain;
 
 namespace BankApplication.Tests.Application
@@ -13,11 +16,16 @@ namespace BankApplication.Tests.Application
         public MovementAppServiceTests()
         {
             var dataSeed = new BankApplicationSeedData();
-            var accountRepository = new AccountRepository(dataSeed.Context);
-            var movementRepository = new MovementRepository(dataSeed.Context);
+            var context = dataSeed.Context;
+
+            var accountRepository = new AccountRepository(context);
+            var movementRepository = new MovementRepository(context);
+
             var accountManager = new AccountManager(accountRepository);
             var movementManager = new MovementManager(movementRepository);
-            _movementAppService = new(accountManager, movementManager);
+
+            var uow = new UnitOfWork(context, null, accountManager, movementManager);
+            _movementAppService = new(uow);
         }
 
         [Fact]

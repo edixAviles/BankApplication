@@ -1,3 +1,4 @@
+using BankApplication.Core.Contracts;
 using BankApplication.Core.Domain;
 using BankApplication.Src.Application.Accounts;
 using BankApplication.Src.Application.Customers;
@@ -8,6 +9,9 @@ using BankApplication.Src.Contracts.Movements;
 using BankApplication.Src.Domain.Accounts;
 using BankApplication.Src.Domain.Customers;
 using BankApplication.Src.Domain.Movements;
+using BankApplication.Src.EFCore.Accounts;
+using BankApplication.Src.EFCore.Customers;
+using BankApplication.Src.EFCore.Movements;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +35,8 @@ builder.Services.AddScoped<IAccountAppService, AccountAppService>();
 builder.Services.AddScoped<IMovementRepository, MovementRepository>();
 builder.Services.AddScoped<IMovementManager, MovementManager>();
 builder.Services.AddScoped<IMovementAppService, MovementAppService>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers();
 

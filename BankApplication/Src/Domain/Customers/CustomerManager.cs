@@ -13,13 +13,13 @@ namespace BankApplication.Src.Domain.Customers
             _customerRepository = customerRepository;
         }
 
-        public async Task<Customer> Get(Guid id)
+        public async Task<Customer> GetAsync(Guid id)
         {
-            var entity = await FoundEntity(id);
+            var entity = await FoundEntityAsync(id);
             return entity;
         }
 
-        public async Task<Customer> Insert(InsertCustomerDto customerInsert)
+        public async Task<Customer> InsertAsync(InsertCustomerDto customerInsert)
         {
             var customer = new Customer
             {
@@ -35,13 +35,13 @@ namespace BankApplication.Src.Domain.Customers
                 State = true,
             };
 
-            var entity = await _customerRepository.Insert(customer);
+            var entity = await _customerRepository.InsertAsync(customer);
             return entity;
         }
 
-        public async Task<Customer> Update(UpdateCustomerDto customerUpdate)
+        public async Task<Customer> UpdateAsync(UpdateCustomerDto customerUpdate)
         {
-            var entity = await FoundEntity(customerUpdate.Id);
+            var entity = await FoundEntityAsync(customerUpdate.Id);
 
             entity.Identification = customerUpdate.Identification;
             entity.Name = customerUpdate.Name;
@@ -52,19 +52,19 @@ namespace BankApplication.Src.Domain.Customers
             entity.Password = customerUpdate.Password;
             entity.State = customerUpdate.State;
 
-            var entityUpdated = await _customerRepository.Update(entity);
+            var entityUpdated = _customerRepository.Update(entity);
             return entityUpdated;
         }
 
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            _ = await FoundEntity(id);
-            await _customerRepository.Delete(id);
+            _ = await FoundEntityAsync(id);
+            _customerRepository.Delete(id);
         }
 
-        private async Task<Customer> FoundEntity(Guid id)
+        private async Task<Customer> FoundEntityAsync(Guid id)
         {
-            var entity = await _customerRepository.Get(id);
+            var entity = await _customerRepository.GetAsync(id);
             return entity ?? throw new ServiceException(CustomerConsts.ErrorCustomerNotExists);
         }
     }

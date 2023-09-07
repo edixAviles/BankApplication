@@ -8,7 +8,7 @@ namespace BankApplication.Src.Shared.Domain
         public const string SavingsAccount = "AHORRO";
         public const string CheckingAccount = "CORRIENTE";
 
-        public static readonly IList<string> Types = new ReadOnlyCollection<string>(new[]
+        public static readonly IEnumerable<string> Types = new ReadOnlyCollection<string>(new[]
         {
             SavingsAccount, CheckingAccount
         });

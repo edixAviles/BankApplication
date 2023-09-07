@@ -22,7 +22,7 @@ namespace BankApplication.Src.Controllers.Movements
         }
 
         [HttpGet("reportes")]
-        public async Task<Response<List<MovementsReportDto>>> GetMovementsByCustomerAndDate(Guid customerId, DateTime startDate, DateTime endDate)
+        public async Task<Response<IEnumerable<MovementsReportDto>>> GetMovementsByCustomerAndDate(Guid customerId, DateTime startDate, DateTime endDate)
         {
             return await _movementAppService.GetMovementsByCustomerAndDate(customerId, startDate, endDate);
         }

@@ -1,4 +1,4 @@
-﻿using BankApplication.Src.Domain.Customers;
+﻿using BankApplication.Src.EFCore.Customers;
 
 namespace BankApplication.Tests.Domain
 {
@@ -16,7 +16,7 @@ namespace BankApplication.Tests.Domain
         public async Task Should_GetCustomer()
         {
 
-            var result = await _customerRepository.Get(TestData.IdCustomer1);
+            var result = await _customerRepository.GetAsync(TestData.IdCustomer1);
 
             Assert.NotNull(result);
             Assert.Equal(TestData.IdCustomer1, result.Id);
@@ -25,7 +25,7 @@ namespace BankApplication.Tests.Domain
         [Fact]
         public async Task Should_GetNullCustomer()
         {
-            var result = await _customerRepository.Get(Guid.NewGuid());
+            var result = await _customerRepository.GetAsync(Guid.NewGuid());
 
             Assert.Null(result);
         }

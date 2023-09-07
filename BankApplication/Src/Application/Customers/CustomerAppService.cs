@@ -1,4 +1,5 @@
-﻿using BankApplication.Core.Response;
+﻿using BankApplication.Core.Contracts;
+using BankApplication.Core.Response;
 using BankApplication.Src.Contracts.Customers;
 using BankApplication.Src.Shared;
 using BankApplication.Src.Shared.Domain;
@@ -7,11 +8,13 @@ namespace BankApplication.Src.Application.Customers
 {
     public class CustomerAppService : ICustomerAppService
     {
+        private readonly IUnitOfWork _unitOfWorkManager;
         private readonly ICustomerManager _customerManager;
 
-        public CustomerAppService(ICustomerManager customerManager)
+        public CustomerAppService(IUnitOfWork unitOfWorkManager)
         {
-            _customerManager = customerManager;
+            _unitOfWorkManager = unitOfWorkManager;
+            _customerManager = _unitOfWorkManager.Customers;
         }
 
         public async Task<Response<CustomerDto>> GetCustomer(Guid id)
@@ -20,7 +23,7 @@ namespace BankApplication.Src.Application.Customers
 
             try
             {
-                var customer = await _customerManager.Get(id);
+                var customer = await _customerManager.GetAsync(id);
 
                 var dto = new CustomerDto
                 {
@@ -50,7 +53,8 @@ namespace BankApplication.Src.Application.Customers
                     throw new ServiceException(PersonConsts.ErrorPersonIncorrectGender);
                 }
 
-                var customer = await _customerManager.Insert(customerData);
+                var customer = await _customerManager.InsertAsync(customerData);
+                await _unitOfWorkManager.CompleteAsync();
 
                 var dto = new CustomerDto
                 {
@@ -80,7 +84,8 @@ namespace BankApplication.Src.Application.Customers
                     throw new ServiceException(PersonConsts.ErrorPersonIncorrectGender);
                 }
 
-                var customer = await _customerManager.Update(customerData);
+                var customer = await _customerManager.UpdateAsync(customerData);
+                await _unitOfWorkManager.CompleteAsync();
 
                 var dto = new CustomerDto
                 {
@@ -104,7 +109,9 @@ namespace BankApplication.Src.Application.Customers
 
             try
             {
-                await _customerManager.Delete(id);
+                await _customerManager.DeleteAsync(id);
+                await _unitOfWorkManager.CompleteAsync();
+
                 return response.OnSuccess(id);
             }
             catch (Exception ex)

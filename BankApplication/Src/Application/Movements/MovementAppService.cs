@@ -1,4 +1,5 @@
-﻿using BankApplication.Core.Response;
+﻿using BankApplication.Core.Contracts;
+using BankApplication.Core.Response;
 using BankApplication.Src.Contracts.Accounts;
 using BankApplication.Src.Contracts.Movements;
 using BankApplication.Src.Shared;
@@ -8,13 +9,15 @@ namespace BankApplication.Src.Application.Movements
 {
     public class MovementAppService : IMovementAppService
     {
+        public IUnitOfWork _unitOfWorkManager;
         private readonly IAccountManager _accountManager;
         private readonly IMovementManager _movementManager;
 
-        public MovementAppService(IAccountManager accountManager, IMovementManager movementManager)
+        public MovementAppService(IUnitOfWork unitOfWorkManager)
         {
-            _accountManager = accountManager;
-            _movementManager = movementManager;
+            _unitOfWorkManager = unitOfWorkManager;
+            _accountManager = _unitOfWorkManager.Accounts;
+            _movementManager = _unitOfWorkManager.Movements;
         }
 
         public async Task<Response<MovementDto>> GetMovement(Guid id)
@@ -23,7 +26,7 @@ namespace BankApplication.Src.Application.Movements
 
             try
             {
-                var movement = await _movementManager.Get(id);
+                var movement = await _movementManager.GetAsync(id);
 
                 var dto = new MovementDto
                 {
@@ -42,13 +45,13 @@ namespace BankApplication.Src.Application.Movements
             }
         }
 
-        public async Task<Response<List<MovementsReportDto>>> GetMovementsByCustomerAndDate(Guid customerId, DateTime startDate, DateTime endDate)
+        public async Task<Response<IEnumerable<MovementsReportDto>>> GetMovementsByCustomerAndDate(Guid customerId, DateTime startDate, DateTime endDate)
         {
-            var response = new ResponseManager<List<MovementsReportDto>>();
+            var response = new ResponseManager<IEnumerable<MovementsReportDto>>();
             try
             {
                 var report = new List<MovementsReportDto>();
-                var movements = (await _movementManager.GetMovementsByCustomerAndDate(customerId, startDate, endDate)).OrderBy(movement => movement.Date).ToList();
+                var movements = (await _movementManager.GetMovementsByCustomerAndDateAsync(customerId, startDate, endDate)).OrderBy(movement => movement.Date).ToList();
 
                 foreach (var movement in movements)
                 {
@@ -86,7 +89,7 @@ namespace BankApplication.Src.Application.Movements
                     throw new ServiceException(MovementConsts.ErrorMovementTypeMovementNotValid);
                 }
 
-                var account = await _accountManager.Get(movementData.AccountId);
+                var account = await _accountManager.GetAsync(movementData.AccountId);
                 if (movementData.Type == MovementConsts.Debit)
                 {
                     if (account.InitialBalance == 0)
@@ -101,8 +104,9 @@ namespace BankApplication.Src.Application.Movements
 
                 movementData.Value = Math.Abs(movementData.Value) * (movementData.Type == MovementConsts.Credit ? 1 : -1);
                 var balance = account.InitialBalance + movementData.Value;
-                var movement = await _movementManager.Insert(movementData, account.InitialBalance, balance);
-                _ = await _accountManager.UpateInitialBalance(account.Id, balance);
+                var movement = await _movementManager.InsertAsync(movementData, account.InitialBalance, balance);
+                _ = await _accountManager.UpateInitialBalanceAsync(account.Id, balance);
+                await _unitOfWorkManager.CompleteAsync();
 
                 var dto = new MovementDto
                 {

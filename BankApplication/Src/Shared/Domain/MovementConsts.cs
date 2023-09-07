@@ -7,7 +7,7 @@ namespace BankApplication.Src.Shared.Domain
     {
         public const string Debit = "DEBITO";
         public const string Credit = "CREDITO";
-        public static readonly IList<string> Types = new ReadOnlyCollection<string>(new[]
+        public static readonly IEnumerable<string> Types = new ReadOnlyCollection<string>(new[]
         {
             Debit, Credit
         });

@@ -13,19 +13,19 @@ namespace BankApplication.Src.Domain.Movements
             _movementRepository = movementRepository;
         }
 
-        public async Task<Movement> Get(Guid id)
+        public async Task<Movement> GetAsync(Guid id)
         {
-            var entity = await FoundEntity(id);
+            var entity = await FoundEntityAsync(id);
             return entity;
         }
 
-        public async Task<List<Movement>> GetMovementsByCustomerAndDate(Guid customerId, DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<Movement>> GetMovementsByCustomerAndDateAsync(Guid customerId, DateTime startDate, DateTime endDate)
         {
-            var movements = await _movementRepository.GetMovementsByCustomerAndDate(customerId, startDate, endDate);
+            var movements = await _movementRepository.GetMovementsByCustomerAndDateAsync(customerId, startDate, endDate);
             return movements;
         }
 
-        public async Task<Movement> Insert(InsertMovementDto movementInsert, double initialBalance, double balance)
+        public async Task<Movement> InsertAsync(InsertMovementDto movementInsert, double initialBalance, double balance)
         {
             var movement = new Movement
             {
@@ -38,13 +38,13 @@ namespace BankApplication.Src.Domain.Movements
                 AccountId = movementInsert.AccountId
             };
 
-            var entity = await _movementRepository.Insert(movement);
+            var entity = await _movementRepository.InsertAsync(movement);
             return entity;
         }
 
-        private async Task<Movement> FoundEntity(Guid id)
+        private async Task<Movement> FoundEntityAsync(Guid id)
         {
-            var entity = await _movementRepository.Get(id);
+            var entity = await _movementRepository.GetAsync(id);
             return entity ?? throw new ServiceException(MovementConsts.ErrorMovementNotExists);
         }
     }
