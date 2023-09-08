@@ -8,9 +8,9 @@ namespace BankApplication.Core.Domain
     public class UnitOfWork : IUnitOfWork
     {
         private readonly BankApplicationDbContext _context;
-        public ICustomerManager Customers { get; }
-        public IAccountManager Accounts { get; }
-        public IMovementManager Movements { get; }
+        public ICustomerManager CustomerManager { get; }
+        public IAccountManager AccountManager { get; }
+        public IMovementManager MovementManager { get; }
 
         public UnitOfWork(
             BankApplicationDbContext context,
@@ -20,9 +20,9 @@ namespace BankApplication.Core.Domain
         )
         {
             _context = context;
-            Customers = customers;
-            Accounts = accounts;
-            Movements = movements;
+            CustomerManager = customers;
+            AccountManager = accounts;
+            MovementManager = movements;
         }
 
         public async Task CompleteAsync()

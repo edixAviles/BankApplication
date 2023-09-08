@@ -60,7 +60,7 @@ namespace BankApplication.Src.Domain.Accounts
         public async Task DeleteAsync(Guid id)
         {
             _ = await FoundEntityAsync(id);
-            _accountRepository.Delete(id);
+            await _accountRepository.DeleteAsync(id);
         }
 
         private async Task<Account> FoundEntityAsync(Guid id)

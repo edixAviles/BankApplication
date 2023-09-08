@@ -58,13 +58,12 @@ namespace BankApplication.Core.Domain
             return entity;
         }
 
-        public virtual void Delete(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
-            var entity = dbSet.Find(id);
-            if (entity != null)
-            {
-                dbSet.Remove(entity);
-            }
+            var entity = await dbSet.FindAsync(id);
+            #pragma warning disable CS8604
+            dbSet.Remove(entity);
+            #pragma warning restore CS8604
         }
     }
 }

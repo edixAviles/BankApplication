@@ -59,7 +59,7 @@ namespace BankApplication.Src.Domain.Customers
         public async Task DeleteAsync(Guid id)
         {
             _ = await FoundEntityAsync(id);
-            _customerRepository.Delete(id);
+            await _customerRepository.DeleteAsync(id);
         }
 
         private async Task<Customer> FoundEntityAsync(Guid id)

@@ -1,7 +1,6 @@
 ﻿using BankApplication.Core.Contracts;
 using BankApplication.Core.Response;
 using BankApplication.Src.Contracts.Accounts;
-using BankApplication.Src.Contracts.Customers;
 using BankApplication.Src.Shared;
 using BankApplication.Src.Shared.Domain;
 
@@ -9,15 +8,11 @@ namespace BankApplication.Src.Application.Accounts
 {
     public class AccountAppService : IAccountAppService
     {
-        private readonly IUnitOfWork _unitOfWorkManager;
-        private readonly IAccountManager _accountManager;
-        private readonly ICustomerManager _customerManager;
+        private readonly IUnitOfWork _uow;
 
-        public AccountAppService(IUnitOfWork unitOfWorkManager)
+        public AccountAppService(IUnitOfWork uow)
         {
-            _unitOfWorkManager = unitOfWorkManager;
-            _accountManager = _unitOfWorkManager.Accounts;
-            _customerManager = _unitOfWorkManager.Customers;
+            _uow = uow;
         }
 
         public async Task<Response<AccountDto>> GetAccount(Guid id)
@@ -26,7 +21,7 @@ namespace BankApplication.Src.Application.Accounts
 
             try
             {
-                var account = await _accountManager.GetAsync(id);
+                var account = await _uow.AccountManager.GetAsync(id);
 
                 var dto = new AccountDto
                 {
@@ -57,9 +52,9 @@ namespace BankApplication.Src.Application.Accounts
                     throw new ServiceException(AccountConsts.ErrorAccountTypeAccountNotValid);
                 }
 
-                var customer = await _customerManager.GetAsync(accountData.CustomerId);
-                var account = await _accountManager.InsertAsync(accountData);
-                await _unitOfWorkManager.CompleteAsync();
+                var customer = await _uow.CustomerManager.GetAsync(accountData.CustomerId);
+                var account = await _uow.AccountManager.InsertAsync(accountData);
+                await _uow.CompleteAsync();
 
                 var dto = new AccountDto
                 {
@@ -90,8 +85,8 @@ namespace BankApplication.Src.Application.Accounts
                     throw new ServiceException(AccountConsts.ErrorAccountTypeAccountNotValid);
                 }
 
-                var account = await _accountManager.UpdateAsync(accountData);
-                await _unitOfWorkManager.CompleteAsync();
+                var account = await _uow.AccountManager.UpdateAsync(accountData);
+                await _uow.CompleteAsync();
 
                 var dto = new AccountDto
                 {
@@ -116,8 +111,8 @@ namespace BankApplication.Src.Application.Accounts
 
             try
             {
-                await _accountManager.DeleteAsync(id);
-                await _unitOfWorkManager.CompleteAsync();
+                await _uow.AccountManager.DeleteAsync(id);
+                await _uow.CompleteAsync();
 
                 return response.OnSuccess(id);
             }

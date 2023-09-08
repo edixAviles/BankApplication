@@ -1,7 +1,6 @@
 ﻿using BankApplication.Core.Domain;
 using BankApplication.Src.Domain.Customers;
 using BankApplication.Src.Domain.Movements;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace BankApplication.Src.Domain.Accounts

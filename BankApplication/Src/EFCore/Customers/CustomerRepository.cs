@@ -1,6 +1,5 @@
 ﻿using BankApplication.Core.Domain;
 using BankApplication.Src.Domain.Customers;
-using Microsoft.EntityFrameworkCore;
 
 namespace BankApplication.Src.EFCore.Customers
 {

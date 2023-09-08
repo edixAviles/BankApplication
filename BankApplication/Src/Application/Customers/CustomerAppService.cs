@@ -8,13 +8,11 @@ namespace BankApplication.Src.Application.Customers
 {
     public class CustomerAppService : ICustomerAppService
     {
-        private readonly IUnitOfWork _unitOfWorkManager;
-        private readonly ICustomerManager _customerManager;
+        private readonly IUnitOfWork _uow;
 
-        public CustomerAppService(IUnitOfWork unitOfWorkManager)
+        public CustomerAppService(IUnitOfWork uow)
         {
-            _unitOfWorkManager = unitOfWorkManager;
-            _customerManager = _unitOfWorkManager.Customers;
+            _uow = uow;
         }
 
         public async Task<Response<CustomerDto>> GetCustomer(Guid id)
@@ -23,7 +21,7 @@ namespace BankApplication.Src.Application.Customers
 
             try
             {
-                var customer = await _customerManager.GetAsync(id);
+                var customer = await _uow.CustomerManager.GetAsync(id);
 
                 var dto = new CustomerDto
                 {
@@ -53,8 +51,8 @@ namespace BankApplication.Src.Application.Customers
                     throw new ServiceException(PersonConsts.ErrorPersonIncorrectGender);
                 }
 
-                var customer = await _customerManager.InsertAsync(customerData);
-                await _unitOfWorkManager.CompleteAsync();
+                var customer = await _uow.CustomerManager.InsertAsync(customerData);
+                await _uow.CompleteAsync();
 
                 var dto = new CustomerDto
                 {
@@ -84,8 +82,8 @@ namespace BankApplication.Src.Application.Customers
                     throw new ServiceException(PersonConsts.ErrorPersonIncorrectGender);
                 }
 
-                var customer = await _customerManager.UpdateAsync(customerData);
-                await _unitOfWorkManager.CompleteAsync();
+                var customer = await _uow.CustomerManager.UpdateAsync(customerData);
+                await _uow.CompleteAsync();
 
                 var dto = new CustomerDto
                 {
@@ -109,8 +107,8 @@ namespace BankApplication.Src.Application.Customers
 
             try
             {
-                await _customerManager.DeleteAsync(id);
-                await _unitOfWorkManager.CompleteAsync();
+                await _uow.CustomerManager.DeleteAsync(id);
+                await _uow.CompleteAsync();
 
                 return response.OnSuccess(id);
             }

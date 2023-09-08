@@ -6,9 +6,9 @@ namespace BankApplication.Core.Contracts
 {
     public interface IUnitOfWork : IDisposable
     {
-        ICustomerManager Customers { get; }
-        IAccountManager Accounts { get; }
-        IMovementManager Movements { get; }
+        ICustomerManager CustomerManager { get; }
+        IAccountManager AccountManager { get; }
+        IMovementManager MovementManager { get; }
         Task CompleteAsync();
     }
 }
